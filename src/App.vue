@@ -1,30 +1,105 @@
 <template>
-  <div id="nav">
-    <router-link to="/">Home</router-link> |
-    <router-link to="/about">About</router-link>
+  <div class="container py-4" style="height: 100vh">
+    <navbar>
+      <template v-slot:logo>
+        <span class="fs-4">Blog Corner</span>
+      </template>
+      <template v-slot:primary-menu>
+        <li class="nav-item">
+          <router-link class="nav-link active" to="/">Home</router-link>
+        </li>
+        <li class="nav-item">
+          <router-link class="nav-link" to="/blogs">Blogs</router-link>
+        </li>
+      </template>
+      <template v-slot:secondary-menu>
+        <li class="nav-item" v-if="!token">
+          <router-link class="nav-link" to="/login"> Log In </router-link>
+        </li>
+        <li class="nav-item" v-if="!token">
+          <router-link class="nav-link active" to="/register">
+            Sign Up
+          </router-link>
+        </li>
+        <li class="nav-item dropdown" v-if="token">
+          <a
+            class="nav-link dropdown-toggle"
+            href="#"
+            id="navbarDropdown"
+            role="button"
+            data-bs-toggle="dropdown"
+            aria-expanded="false"
+          >
+            <img
+              src="https://dummyimage.com/200x200/9c939c/fff"
+              width="30"
+              class="rounded-circle"
+            />
+          </a>
+          <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <li>
+              <router-link class="dropdown-item" to="/me">Profile</router-link>
+            </li>
+            <li>
+              <router-link class="dropdown-item" to="/dashboard"
+                >Dashboard</router-link
+              >
+            </li>
+            <li>
+              <router-link class="dropdown-item" to="/blog/create"
+                >Create Blog</router-link
+              >
+            </li>
+            <li><hr class="dropdown-divider" /></li>
+            <li>
+              <button class="dropdown-item text-danger" @click="logout">
+                Logout
+              </button>
+            </li>
+          </ul>
+        </li>
+      </template>
+    </navbar>
+
+    <router-view />
+
+    <my-footer>
+      <template v-slot:copy-name> Copyright@Skye-LAB</template>
+    </my-footer>
   </div>
-  <router-view/>
 </template>
 
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
+<script>
+import { ref, onMounted } from "vue";
+import { useStore } from "vuex";
 
-#nav {
-  padding: 30px;
-}
+import Navbar from "@/components/nav/Navbar.vue";
+import MyFooter from "@/components/MyFooter.vue";
 
-#nav a {
-  font-weight: bold;
-  color: #2c3e50;
-}
+export default {
+  name: "App",
+  components: {
+    Navbar,
+    MyFooter,
+  },
+  setup() {
+    let store = useStore();
+    const token = ref("");
 
-#nav a.router-link-exact-active {
-  color: #42b983;
-}
-</style>
+    onMounted(() => {
+      token.value = localStorage.getItem("token");
+    });
+
+    const logout = () => {
+      store.dispatch("users/logoutUser");
+    };
+
+    return {
+      token,
+      logout,
+    };
+  },
+};
+</script>
+
+<style></style>

@@ -6,6 +6,7 @@ export default {
   state: {
     blogs: [],
     blogId: "",
+    error: "",
   },
   mutations: {
     setBlogs(state, blog) {
@@ -13,6 +14,9 @@ export default {
     },
     setBlogId(state, id) {
       state.blogId = id;
+    },
+    setError(state, error) {
+      state.error = error;
     },
   },
   actions: {
@@ -29,6 +33,9 @@ export default {
         })
         .then((res) => {
           router.push("/dashboard");
+        })
+        .catch((err) => {
+          ctx.commit("setError", err.response.data);
         });
     },
   },

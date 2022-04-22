@@ -22,6 +22,7 @@ export default {
         .then((res) => {
           localStorage.setItem("token", res.data.token);
           localStorage.setItem("admin", res.data.user.admin);
+          localStorage.setItem("username", res.data.user.username);
           ctx.commit("setError", "");
           window.location.replace("/");
         })
@@ -38,6 +39,8 @@ export default {
         })
         .then(() => {
           router.push("/login");
+        }).catch(err => {
+          ctx.commit("setError", err.response.data);
         });
     },
     logoutUser(ctx) {

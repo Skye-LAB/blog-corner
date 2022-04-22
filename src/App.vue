@@ -1,5 +1,5 @@
 <template>
-  <div class="container py-4" style="height: 100vh">
+  <div class="d-flex flex-column container pb-4 pt-2" style="height: 100vh">
     <navbar>
       <template v-slot:logo>
         <span class="fs-4">Blog Corner</span>
@@ -14,12 +14,12 @@
       </template>
       <template v-slot:secondary-menu>
         <li class="nav-item" v-if="!token">
-          <router-link class="nav-link" to="/login"> Log In </router-link>
+          <router-link class="nav-link" to="/login">Log In</router-link>
         </li>
         <li class="nav-item" v-if="!token">
-          <router-link class="nav-link active" to="/register">
-            Sign Up
-          </router-link>
+          <router-link class="nav-link active" to="/register"
+            >Sign Up</router-link
+          >
         </li>
         <li class="nav-item dropdown" v-if="token">
           <a
@@ -41,16 +41,18 @@
               <router-link class="dropdown-item" to="/me">Profile</router-link>
             </li>
             <li>
-              <router-link class="dropdown-item" to="/dashboard"
-                >Dashboard</router-link
-              >
+              <router-link class="dropdown-item" to="/dashboard">
+                Dashboard
+              </router-link>
             </li>
             <li>
-              <router-link class="dropdown-item" to="/blog/create"
-                >Create Blog</router-link
-              >
+              <router-link class="dropdown-item" to="/blog/create">
+                Create Blog
+              </router-link>
             </li>
-            <li><hr class="dropdown-divider" /></li>
+            <li>
+              <hr class="dropdown-divider" />
+            </li>
             <li>
               <button class="dropdown-item text-danger" @click="logout">
                 Logout
@@ -61,10 +63,12 @@
       </template>
     </navbar>
 
-    <router-view />
+    <main class="flex-shrink-0">
+      <router-view />
+    </main>
 
     <my-footer>
-      <template v-slot:copy-name> Copyright@Skye-LAB</template>
+      <template v-slot:copy-name>Copyright@Skye-LAB</template>
     </my-footer>
   </div>
 </template>

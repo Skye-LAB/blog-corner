@@ -49,7 +49,7 @@
 </template>
 
 <script>
-import { ref, computed } from "vue";
+import { ref, computed, onMounted } from "vue";
 import { useStore } from "vuex";
 
 import TitleContent from "@/components/TitleContent.vue";
@@ -63,6 +63,10 @@ export default {
 
     const email = ref("");
     const password = ref("");
+
+    onMounted(() => {
+      store.commit("users/setError", "");
+    })
 
     const login = () => {
       store.dispatch("users/loginUser", {

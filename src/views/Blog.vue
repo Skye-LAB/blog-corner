@@ -3,13 +3,12 @@
     <main class="container d-flex flex-column justify-content-start">
       <div class="mb-4">
         <div class="container-fluid">
-          <img
-            class="img-fluid rounded mx-auto d-block"
-            src="https://dummyimage.com/720x480/b8b8b8/454545.png"
-          />
+          <img class="img-fluid rounded mx-auto d-block" src="https://dummyimage.com/720x480/b8b8b8/454545.png" />
         </div>
       </div>
-      <h4>{{ blog ? blog.title : "" }}</h4>
+      <div class="d-flex justify-content-between">
+        <h4>{{ blog ? blog.title : "" }}</h4><i class="bi-heart fs-5"></i>
+      </div>
       <p class="fw-light">By {{ blog.user.username }}</p>
       <div class="text-justify">
         <p v-html="blog.body"></p>
@@ -27,16 +26,10 @@
         <card v-for="blog in blogs" :key="blog.id">
           <template v-slot:card-badge> New </template>
           <template v-slot:card-image>
-            <img
-              class="card-img-top"
-              src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg"
-            />
+            <img class="card-img-top" src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg" />
           </template>
           <template v-slot:card-title-author>
-            <router-link
-              class="fw-bolder text-decoration-none text-dark"
-              :to="`/blogs/${blog.id}`"
-            >
+            <router-link class="fw-bolder text-decoration-none text-dark" :to="`/blogs/${blog.id}`">
               <h5>{{ blog.title }}</h5>
             </router-link>
             <p class="fw-light">By {{ blog.user.username }}</p>

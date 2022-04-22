@@ -8,6 +8,9 @@
   <form id="form" @submit.prevent="register">
     <div class="row my-3">
       <div class="col-md-6 col-sm-12 mx-auto">
+        <div class="alert alert-danger" v-if="error">
+        {{ error }}
+        </div>
         <div class="input-group mb-3">
           <span class="input-group-text">
             <i class="bi bi-file-person-fill"></i>
@@ -58,7 +61,7 @@
 </template>
 
 <script>
-import { ref } from "vue";
+import { ref, computed, onMounted } from "vue";
 import { useStore } from "vuex";
 
 import TitleContent from "@/components/TitleContent.vue";
@@ -74,6 +77,10 @@ export default {
     const email = ref("");
     const password = ref("");
 
+    onMounted(() => {
+      store.commit("users/setError", "");
+    })
+
     const register = () => {
       store.dispatch("users/registerUser", {
         username: username.value,
@@ -87,6 +94,7 @@ export default {
       email,
       password,
       register,
+      error: computed(() => store.state.users.error)
     };
   },
 };

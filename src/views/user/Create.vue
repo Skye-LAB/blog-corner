@@ -4,29 +4,27 @@
       <h4>Create Blog</h4>
     </template>
   </title-content>
+  <div class="alert alert-danger" v-if="error">
+    {{ error }}
+  </div>
   <div>
     <form @submit.prevent="makeBlog">
       <div class="row mb-3">
         <div class="col-xl-6">
-          <label for="formFile" class="form-label">Thumbnail: </label>
-          <input class="form-control" type="file" id="formFile" />
-        </div>
-
-        <div class="col-xl-6">
           <label for="title" class="form-label">Title: </label>
           <input class="form-control" type="text" id="title" v-model="title" />
         </div>
+
+        <div class="col-xl-6">
+          <label for="formFile" class="form-label">Thumbnail: </label>
+          <input class="form-control" type="file" id="formFile" />
+        </div>
       </div>
 
-      <span>Content: </span>
+      <span>Body: </span>
       <ckeditor :editor="editor" v-model="content"></ckeditor>
       <div class="d-flex align-items-center justify-content-end my-4">
-        <button
-          type="button"
-          class="btn btn-warning"
-          data-bs-toggle="modal"
-          data-bs-target="#previewBlog"
-        >
+        <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#previewBlog">
           Preview
         </button>
         <button type="submit" class="btn btn-primary ms-4">Post</button>
@@ -38,14 +36,11 @@
         <div>
           <div class="mb-4">
             <div class="container-fluid">
-              <img
-                class="img-fluid rounded mx-auto d-block"
-                src="https://dummyimage.com/540x360/b8b8b8/454545.png"
-              />
+              <img class="img-fluid rounded mx-auto d-block" src="https://dummyimage.com/540x360/b8b8b8/454545.png" />
             </div>
           </div>
           <h4>{{ title }}</h4>
-          <p class="fw-light">By author</p>
+          <p class="fw-light">By {{ username }}</p>
           <div class="text-justify" v-html="content"></div>
         </div>
       </template>
@@ -59,7 +54,7 @@
 </template>
 
 <script>
-import { ref } from "vue";
+import { ref, computed, onMounted } from "vue";
 import { useStore } from "vuex";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 
@@ -74,21 +69,27 @@ export default {
   setup() {
     const store = useStore();
     const editor = ClassicEditor;
-    const content = ref("");
+    const body = ref("");
     const title = ref("");
+
+    onMounted(() => {
+      store.commit("blogs/setError", "");
+    })
 
     const makeBlog = () => {
       store.dispatch("blogs/createBlog", {
         title: title.value,
-        body: content.value,
+        body: body.value,
       });
     };
 
     return {
+      username: localStorage.getItem("username"),
       editor,
-      content,
+      body,
       title,
       makeBlog,
+      error: computed(() => store.state.blogs.error)
     };
   },
 };
